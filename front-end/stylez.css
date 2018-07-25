@@ -32,9 +32,10 @@ body{
 .edit-widget{
     background-color: #0000ff;
     width: 20%;
-    min-height: 100%;
+    min-height: 50%;
     position: fixed;
     right: 0;
+    bottom: 0;
 }
 
 .add-button{
@@ -46,5 +47,6 @@ body{
 .edit-button{
     position: fixed;
     right: 0;
-    bottom: 0;
+    top: 0;
+    
 }
