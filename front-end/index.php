@@ -1,21 +1,46 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <link rel="stylesheet" href="stylez.css">
     </head>
 
     <body>
-        <p>Hello, World!<p>
         <div class=container>
-            <div class=add-widget>
+            <div id=main-content class=main-content>
+
+            </div>
+
+            <div id=add-widget class=add-widget >
             
             </div>
 
-            <div class=main-content>
+            <div id=edit-widget class=edit-widget>
 
             </div>
-            <div class=edit-widget>
-            
-            </div>
+
+            <button id="add-button" class="add-button" onclick="visibleButtonClick('add-widget')">Add</button>
+
+            <button id="edit-button" class="edit-button" onclick="visibleButtonClick('edit-widget')">Edit</button>
+
+
+
         </div>
+            <script>
+                function visibleButtonClick(id){
+                    console.log("Starting");
+                    var element = document.getElementById(id);
+                    console.log(element);
+                    if(element.style.visibility === "hidden"){
+                        element.style.visibility = "visible";
+                        console.log("setting visible");
+                    }
+                    else{
+                        element.style.visibility = "hidden";
+                        console.log("setting hidden");
+                    }
+                }
+            </script>
+
+            <!-- <script src="script.js"></script> -->
     </body>
 </html>
