@@ -19,7 +19,7 @@
             if ($get === 'role')
                 return $this->role;
 
-            throw Exception('Invalid property access');
+            throw Exception('Invalid property accessed: ' . $get);
         }
     }
 
