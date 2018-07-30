@@ -5,7 +5,7 @@
         private $name;
         private $role;
 
-        public function __construct(int $id, string $name, string $role) {
+        public function __construct($id, $name, $role) {
             $this->id = $id;
             $this->name = $name;
             $this->role = $role;
