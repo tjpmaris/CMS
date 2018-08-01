@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="stylez.css">
+    </head>
+
+    <body>
+        <header>
+            <div id="main-content">
+
+            </div>
+        </header>
+        <div class="container">
+            <div id="main-content" class="main-content">
+
+            </div>
+
+            <div id="add-widget" class="add-widget">
+                <button class="edit-button-show" onclick="showEditWidget()">O</button>
+                <button class="add-button-hide" onclick="hideAddWidget(); showAddButton();">X</button>
+                <button class="add-paragraph-button" onclick="addParagraph()">Add Paragraph</button>
+            
+            </div>
+
+            <div id="edit-widget" class="edit-widget">
+                <button class="edit-button-hide" onclick="hideEditWidget()">X</button>
+
+            </div>
+
+            <button id="add-button" class="add-button-show" onclick="showAddWidget(); hideAddButton();">Add</button>
+
+        </div>
+
+            <script src="script.js"></script>
+    </body>
+</html>
