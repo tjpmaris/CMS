@@ -1,4 +1,3 @@
-console.log("things");
 var pages = [];
 pages.push({ name:"Home", path:"/home/", filename:""})
 pages.push({ name:"About", path:"/about/", filename:""})
