@@ -14,6 +14,7 @@ value(0,'admin','admin','password');
 
 create Table if Not exists Element(
 	element_id int(11) not null auto_increment,
+    webpage_id int(11),
     element_name varchar(45) not null unique,
     element_type varchar(45) not null,
     element_color varchar(50),
@@ -29,8 +30,3 @@ create table if not exists webpage(
     webpage_name varchar(50)
 );
 
-create table if not exists webpage_elements(
-	web_id int(11) not null,
-    element_id int(11) not null,
-    primary key(web_id, element_id)
-);
