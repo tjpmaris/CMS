@@ -1,4 +1,5 @@
 <?php
+include 'ElementClass.php';
     class Webpage{
         private $webpageName;
         private $webpageId;

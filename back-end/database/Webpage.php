@@ -1,34 +1,42 @@
 <?php
     include 'mysql.php';
     include 'WebpageClass.php';
+    include 'ElementClass.php';
     db_connection();
     //query all records from the database
     $query_webpages = "select * from webpage";
-    $query_elements = "select * from elements";
-    
+    $webPages = array();
     //execute the query
     $pages_result = $mysqli->query( $query_webpages );
-    $elements_result = $mysqli->query( $query_elements );
     
     //get number of rows returned
     $num_results = $pages_result->num_rows;
 
     if( $num_results > 0){ 
-      $personJson = '{';
-      $personJson .= '"pages": [';
         while( $row = $pages_result->fetch_assoc() ){
             extract($row);
             header("Access-Control-Allow-Origin: *");
-            $personJson .= '{"webId":'.$webpage_id.',"webName":"'.$web_name.'", "elements":[{';
+            array_push($webPages, new WebpageClass($web_name, $webpage_id));
         }
-      $personJson .= '}';
-      $personJson = str_replace("},}", "}]}", $personJson);
-      echo $personJson;
     }else{
         //if database table is empty
     
     }
     //disconnect from database
+    $result->free();
+    $mysqli->close();
+    $query_elements = "select * from elements";
+    $elements_result = $mysqli->query( $query_elements );
+    $num_results = $elements_result->num_rows;
+    if( $num_results > 0){ 
+          while( $row = $pages_result->fetch_assoc() ){
+              extract($row);
+              header("Access-Control-Allow-Origin: *");
+              
+          }
+    }else{
+      
+    }
     $result->free();
     $mysqli->close();
 ?>
