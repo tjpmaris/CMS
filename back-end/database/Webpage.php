@@ -32,7 +32,7 @@
           while( $row = $pages_result->fetch_assoc() ){
               extract($row);
               header("Access-Control-Allow-Origin: *");
-              
+              $webPages[$webpage_id]->addElementToPage(new ElementClass($element_id, $element_name))
           }
     }else{
       
