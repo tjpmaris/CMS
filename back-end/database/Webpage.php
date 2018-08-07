@@ -1,7 +1,7 @@
 <?php
     include 'mysql.php';
     include 'WebpageClass.php';
-    // include 'ElementClass.php';
+    include 'ElementClass.php';
     $mysqli = db_connection($DB_CONFIG);
     //query all records from the database
     $query_webpages = "select * from webpage";
@@ -16,8 +16,7 @@
         while( $row = $pages_result->fetch_assoc() ){
             extract($row);
             header("Access-Control-Allow-Origin: *");
-            echo $webpage_id." ".$webpage_name." ".$webpage_filename." ".$webpage_filepath."<br/>";
-            array_push($webPages, new Webpage($webpage_name, $webpage_id));
+            array_push($webPages, new Webpage($webpage_name, $webpage_id, $webpage_filename, $webpage_filepath));
         }
     }else{
         //if database table is empty
@@ -28,21 +27,38 @@
     $mysqli->close();
 
     $mysql = db_connection($DB_CONFIG);
-    $query_elements = "select * from elements";
+    $query_elements = "select * from element";
     $elements_result = $mysql->query( $query_elements );
-    echo $elements_result."resutlsa;hgdks";
-    // echo $elements_result->num_rows;
-    // $num_eleresults = $elements_result->num_rows;
-    if(true){//$num_eleresults > 0){ 
-          while( $row = $elements_result->fetch_assoc() ){
-              extract($row);
-              header("Access-Control-Allow-Origin: *");
-              echo $webpage_id." ".$element_name." ".$element_id." ".$element_content."<br/>";
-              //$webPages[$webpage_id]->addElementToPage(new ElementClass($element_id, $element_name));
-          }
+    $num_eleresults = $elements_result->num_rows;
+    if($num_eleresults > 0){ 
+        while( $row = $elements_result->fetch_assoc() ){
+            extract($row);
+            header("Access-Control-Allow-Origin: *");
+            foreach($webPages as &$page){
+                if($page->webpageId == $webpage_id){
+                    $page->addElementToPage(new Element($element_name,$element_id, $webpage_id, $element_color, $element_background_color,$element_type,$element_font_size,$element_size));
+                }
+            }
+        }
     }else{
       
     }
     $elements_result->free();
     $mysql->close();
+    $responce = '{"pages":[';
+    for($i = 0; $i < count($webPages); $i++){
+        $page = $webPages[$i];
+        $responce .= '{ "webpage_name":"'.$page->webpageName.'", "webpage_id":'.$page->webpageId;
+        $responce .= ',"webpage_filename":"'.$page->webFileName.'", "webpage_file_path":"'.$page->webFilePath.'"';
+        $responce .= ',"webpage_elements": [';
+        foreach($page->elements as &$element){
+            $responce .= '{"element_name":"'.$element->elementName.'","element_id":'.$element->elementId.',"element_color":"'.$element->elementColor.'","element_background":"';
+            $responce .= $element->elementBackground.'","element_type":"'.$element->elementType.'","element_font":"'.$element->elementFont.'","element_size":';
+            $responce .= $element->elementSize.'},';
+        }
+        $responce .= ']},';
+    }
+    $responce .= ']}';
+    $responce = str_replace("},]}","}]}", $responce);
+    echo $responce;
 ?>
