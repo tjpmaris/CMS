@@ -5,5 +5,4 @@
     values(".$_GET["id"].",'".$_GET["name"]."','".$_GET["content"]."','".$_GET["type"]."','".$_GET["color"]."','".$_GET["background"]."',".$_GET["font"].",".$_GET["size"].")";
     $mysqli->query($sql);
     $mysqli->close();
-    echo "Element Inserted";
 ?>

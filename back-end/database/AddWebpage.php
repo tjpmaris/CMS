@@ -5,8 +5,4 @@
     values('".$_GET['name']."', '".$_GET['path']."','".$_GET['filename']."')";
     $mysqli->query($sql);
     $mysqli->close();
-    echo $_GET['name']."<br/>";
-    echo $_GET['path']."<br/>";
-    echo $_GET['filename']."<br/>";
-    echo "inserted";
 ?>
