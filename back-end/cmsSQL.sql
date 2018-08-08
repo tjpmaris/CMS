@@ -16,6 +16,7 @@ create Table if Not exists Element(
 	element_id int(11) not null auto_increment,
     webpage_id int(11),
     element_name varchar(45) not null unique,
+    element_content varchar(255),
     element_type varchar(45) not null,
     element_color varchar(50),
     element_background_color varchar(50),
@@ -28,5 +29,7 @@ create Table if Not exists Element(
 create table if not exists webpage(
 	webpage_id int(11) not null auto_increment Primary key,
     webpage_name varchar(50)
+    webpage_filepath varchar(255),
+    webpage_filename varchar(45)
 );
 

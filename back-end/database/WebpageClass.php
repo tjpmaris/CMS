@@ -1,28 +1,20 @@
 <?php
     class Webpage{
-        private $webpageName;
-        private $webpageId;
-        private $elements = array();
+        public $webpageName;
+        public $webpageId;
+        public $webFileName;
+        public $webFilePath;
+        public $elements = array();
 
-        public function __construct($webName, $webId){
+        public function __construct($webName, $webId, $webFileName, $webFilePath){
             $this->webpageName = $webName;
             $this->webpageId = $webId;
+            $this->webFileName = $webFileName;
+            $this->webFilePath = $webFilePath;
         }
 
         public function addElementToPage(Element $element){
             array_push($this->elements, $element);
-        }
-
-        public function getPageName(){
-            return $this->webpageName;
-        }
-
-        public function getPageId(){
-            return $this->webpageId;
-        }
-        
-        public function getElements(){
-            return $this->elements;
         }
     }
 ?>
