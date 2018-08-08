@@ -2,15 +2,12 @@
 
     class Theme {
         public $id;
-        public $name;
-        public $properties;
-        public $rules;
+        public $css;
 
-        public function __construct($id, $name, $properties, $rules) {
+        public function __construct($id, $name, $css) {
             $this->id = $id;
             $this->name = $name;
-            $this->properties = $properties;
-            $this->rules = $rules;
+            $this->css = $css;
         }
     }
 

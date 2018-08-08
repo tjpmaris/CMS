@@ -1,0 +1,104 @@
+html { 
+    height: 100%;
+    --primary-color: #3498DB;
+    --secondary-color: #3498DB;
+    --text-color: rgba(0, 0, 0, .72);
+    --background-color: #fafafa;
+    --navigation-color: #D62956;
+    --brand-color: #fff;
+    --link-color:#fefefe;
+    --shadow-color: rgba(0, 0, 0, .72);
+}
+body { min-height: 100%; display: flex }
+html, body {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    color: var(--text-color);
+    background-color: var(--background-color);
+    line-height: 1.5em;
+    font-family: sans-serif;
+}
+main {
+    display: flex;
+    flex-grow: 1;
+    flex-basis: auto;
+    flex-direction: column;
+}
+
+main h1 {
+    color: var(--secondary-color);
+}
+
+main h1, main p {
+    margin-left: 10%;
+    width: 50%;
+}
+
+h1 {
+    margin-top: 1em;
+    margin-bottom: 0.25em;
+}
+
+.navigation {
+    display: flex;
+    flex-grow: 1;
+    flex-basis: 90%;
+    flex-direction: column;
+    background: var(--navigation-color);
+    box-shadow: 1px 0px 12px 0px var(--shadow-color);
+}
+
+.navigation h1 {
+    margin-top: .75em;
+    padding: 0;
+    padding-left: 0.75em;
+    color: var(--brand-color);
+    font-size: 3rem;
+    margin-bottom: 0.75rem;
+    font-style: italic;
+    letter-spacing: 0.1rem;
+    font-family: serif;
+    font-weight: 800;
+}
+
+.navigation ul {
+    padding-left: 0;
+    margin-left: 0;
+    list-style-type: none;
+}
+
+.navigation li {
+    width: 100%;
+}
+
+.navigation a {
+    padding: .5rem 0 .5rem 4rem;
+    display: block;
+    color: var(--link-color);
+    text-decoration: none;
+    letter-spacing: 1px;
+    font-size: 18px;
+    font-weight: 100;
+}
+
+.navigation li:nth-child(1) {
+    border-top: 2px solid rgba(255, 255, 255, .30);
+}
+
+.navigation a:nth-child(2) {
+    border-bottom: 2px solid rgba(255, 255, 255, .30);
+}
+
+.navigation a:last-child {
+    border-bottom: 2px solid rgba(255, 255, 255, .30);
+}
+
+.navigation a:hover {
+    background-color:var(--background-color);
+    color: var(--text-color);
+}
+.navigation a:active {
+    color:#fefefe;
+    background-color:rgba(255, 255, 255, .30);
+}

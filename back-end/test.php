@@ -1,6 +1,7 @@
 <?php
 require_once "database/ThemeDb.class.php";
 require_once "database/mysql.php";
+require_once "authentication/authentication.php";
 
 // respond to preflights
 if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
@@ -12,9 +13,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 
 header("Access-Control-Allow-Origin: *");
 
-$db = new ThemeDb(db_connection($DB_CONFIG));
+$connection = db_connection($DB_CONFIG);
+$db = new ThemeDb($connection);
 $theme = $db->query_theme_by_id(1);
 
 echo json_encode($theme);
+
+login(new UserDb($connection), "admin", "admin");
 
 ?>
