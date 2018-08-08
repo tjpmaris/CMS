@@ -33,3 +33,25 @@ create table if not exists webpage(
     webpage_filename varchar(45)
 );
 
+CREATE TABLE IF NOT EXISTS theme(
+    theme_id int not null auto_increment PRIMARY KEY,
+    webpage_id int not null, 
+    theme_name VARCHAR(45) NOT NULL unique
+);
+
+CREATE TABLE IF NOT EXISTS theme_rule(
+    rule_id INT NOT NULL auto_increment PRIMARY KEY,
+    theme_id INT NOT NULL,
+    rule_value VARCHAR(512)
+);
+
+CREATE TABLE IF NOT EXISTS theme_property(
+    property_id INT NOT NULL auto_increment PRIMARY KEY,
+    theme_id INT NOT NULL,
+    property_name VARCHAR(128) NOT NULL,
+    property_value VARCHAR(128) NOT NULL
+);
+
+insert into theme (theme_name) values (0, 'CoolTheme');
+INSERT INTO theme_property(theme_id, property_name, property_value) VALUES (1, '--primary-color', '#ff00ff');
+INSERT INTO theme_rule(theme_id, rule_value) VALUES (1, 'h1 {color: var(--primary-color);}') 
