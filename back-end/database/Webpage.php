@@ -21,6 +21,7 @@
         $response .= "{\"details\" : ";
         $response .= $json;
         $response .= ", \"elements\" : [";
+        
         foreach($elements as $element){
             if($element["webpageId"] == $row["id"]){
                 $json = json_encode($element);
