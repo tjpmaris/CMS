@@ -49,6 +49,32 @@
 
             return $themes;
         }
+
+        public function query_site_theme() {
+            $db = $this-> db;
+            $query = 'SELECT theme.* FROM theme JOIN site_theme on site_theme.theme_id = theme.theme_id';
+
+            $result = $db->query($query);
+
+            if (!$result) {
+                throw new Exception($db->error);
+            }
+
+            $theme = $result->fetch_assoc();
+
+            return new Theme($theme['theme_id'], $theme['theme_name'], $theme['theme_css']);
+        }
+
+        public function set_site_theme($theme_id) {
+            $db = $this->db;
+            $query = 'UPDATE site_theme SET theme_id = ' . $db->real_escape_string($theme_id);
+
+            $result = $db->query($query);
+
+            if (!$result) {
+                throw new Exception($db->error);
+            }
+        }
     }
 
 ?>

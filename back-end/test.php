@@ -15,7 +15,7 @@ header("Access-Control-Allow-Origin: *");
 
 $connection = db_connection($DB_CONFIG);
 $db = new ThemeDb($connection);
-$theme = $db->query_theme_by_id(1);
+$theme = $db->query_site_theme();
 
 echo json_encode($theme);
 

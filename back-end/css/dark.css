@@ -102,3 +102,38 @@ h1 {
     color:#fefefe;
     background-color:rgba(255, 255, 255, .30);
 }
+
+.form input[type="text"],
+.form input[type="password"],
+.form input[type="email"],
+.form input[type="number"],
+.form select,
+.form textarea {
+    padding: 0.5em 0.6em;
+    border: 1px solid #ccc;
+    box-shadow: inset 0 1px 3px #ddd;
+    border-radius: 4px;
+}
+
+.form label {
+    margin: 0.25em 0;
+    display: block;
+    margin-bottom: 0;
+}
+
+.form input, .form button {
+    display: block;
+    margin: 0.5em 0;
+}
+
+.button {
+    font-family: inherit;
+    font-size: 100%;
+    padding: 0.5em 1em;
+    border: none rgba(0, 0, 0, 0);
+    color: #fff;
+    letter-spacing: 0.5px;
+    background-color: var(--primary-color);
+    text-decoration: none;
+    border-radius: 2px;
+}
