@@ -19,7 +19,8 @@ $theme = $db->query_site_theme();
 
 $user = login(new UserDb($connection), "admin", "admin");
 
-echo json_encode($theme);
-echo var_dump($user);
+echo json_encode(session_id());
+// echo json_encode($theme);
+// echo var_dump($user);
 
 ?>
