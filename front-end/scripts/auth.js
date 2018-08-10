@@ -87,6 +87,14 @@ function login(url, session, userName, password) {
     })
 }
 
+function logout(url) {
+    return new Promise((resolve, reject) => {
+        httpGet(url)
+            .then(resolve)
+            .catch(reject);
+    });
+}
+
 function setSessionCookie(session, phpsessid) {
     session.cookie = phpsessid;
 }
