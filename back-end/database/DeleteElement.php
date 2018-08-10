@@ -1,7 +1,17 @@
 <?php
     include 'mysql.php';
     $mysqli = db_connection($DB_CONFIG);
-    $sql = "delete from element where element_id =".$_GET['id'];
-    $mysqli->query($sql);
+
+    if(isset($_GET["id"])){
+        $sql = "delete from element where id =".$_GET['id'];
+        if( !$mysqli->query($sql) ) {
+            
+            echo "Database Error: Unable to delete record.";
+        }
+    }
+    else{
+        echo "Invalid Request";
+    }
+
     $mysqli->close();
 ?>

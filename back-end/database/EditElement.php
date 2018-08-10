@@ -1,9 +1,43 @@
 <?php
     include 'mysql.php';
     $mysqli = db_connection($DB_CONFIG);
-    $sql = 'UPDATE element SET webpage_id ='.$_GET["webId"].', element_name="'.$_GET["name"].'",element_content="'.$_GET["content"].'", element_type="'.$_GET["type"];
-    $sql .= '", element_color="'.$_GET["color"].'", element_background_color="'.$_GET["background"].'", element_font_size='.$_GET["font"].', element_size ='.$_GET["size"];
-    $sql .= ' WHERE element_id = '.$_GET["elementId"];
-    $mysqli->query($sql);
+    
+    if(isset($_GET['id'])){
+        $sql = 'UPDATE element SET ';
+        
+        if(isset($_GET['webpageId']))
+            $sql.= "webpageId = '".$_GET["webpageId"]."',";
+        
+        if(isset($_GET['name']))
+            $sql.= "name = '".$_GET["name"]."',";
+        
+        if(isset($_GET['content']))
+            $sql.= "content = '".$_GET["content"]."',";
+
+        if(isset($_GET['type']))
+            $sql.= "`type` = '".$_GET["type"]."',";
+
+        if(isset($_GET['color']))
+            $sql.= "color = '".$_GET["color"]."',";
+
+        if(isset($_GET['backgroundColor']))
+            $sql.= "backgroundColor = '".$_GET["backgroundColor"]."',";
+
+        if(isset($_GET['fontSize']))
+            $sql.= "fontSize = '".$_GET["fontSize"]."',";
+        
+        if(isset($_GET['size']))
+            $sql.= "`size` = '".$_GET["size"]."',";
+            
+        $sql = rtrim($sql, ",");
+        $sql .= " WHERE id = ".$_GET["id"];
+
+        if( !$mysqli->query($sql) ) {
+            echo "Database Error: Unable to delete record.";
+        }
+    }
+    else{
+        echo "Invalid Request";
+    }
     $mysqli->close();
 ?>

@@ -2,8 +2,8 @@
 
 $DB_CONFIG = array(
     'host' => 'localhost',
-    'username' => 'root',
-    'password' => '',
+    'username' => 'tom',
+    'password' => 'pass',
     'db_name' => 'cmsphp'
 );
 
