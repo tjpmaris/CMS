@@ -36,21 +36,29 @@ function buildQueryString(parameters) {
     return "?" + strings.join("&", strings);
 }
 
-function retrieveTheme(url, themeId) {
+function retrieveTheme(url) {
+    return new Promise((resolve, reject) => {
+        httpGet(url)
+            .then(JSON.parse)
+            .then(setStyleFromTheme)
+            .then(resolve)
+            .catch(reject);
+    });
+}
+
+function setTheme(url, themeId) {
     let queryString = buildQueryString({
         "themeId": themeId,
     });
 
     return new Promise((resolve, reject) => {
         httpGet(url + queryString)
-            .then(JSON.parse)
-            .then(setTheme)
             .then(resolve)
-            .catch(reject);
+            .then(reject);
     });
 }
 
-function setTheme(theme) {
+function setStyleFromTheme(theme) {
     let existingStyle = document.head.querySelector('#dynamic-css');
     if (existingStyle) {
         document.head.removeChild(existingStyle);
@@ -77,12 +85,6 @@ function login(url, session, userName, password) {
             })
             .catch(reject);
     })
-}
-
-function logout(session) {
-    if (isUserLoggedIn()) {
-        setSessionCookie(session, undefined)
-    }
 }
 
 function setSessionCookie(session, phpsessid) {
