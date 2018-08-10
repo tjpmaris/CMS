@@ -102,3 +102,18 @@ function setSessionCookie(session, phpsessid) {
 function isUserLoggedIn(session) {
     return session.cookie !== undefined;
 }
+
+/* EXAMPLE
+    login("http://localhost:8000/class/cms/back-end/login.php/", session, "admin", "admin")
+        .then(e => {
+            console.log("Admin logged in:", isUserLoggedIn(session));
+        })
+        .catch(console.log);
+
+    logout("http://localhost:8000/class/cms/back-end/logout.php/")
+        .then(e => {
+            setSessionCookie(session, undefined);
+            console.log("User is logged in:", isUserLoggedIn(session));
+        })
+        .catch(console.log);
+*/

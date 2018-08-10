@@ -15,7 +15,7 @@ header("Access-Control-Allow-Origin: *");
 if (isset($_GET['userName']) && isset($_GET['password'])) {
     $connection = db_connection($DB_CONFIG);
     $db = new UserDb($connection);
-    $user = login(db, $_GET['userName'], $_GET['password']);
+    $user = login($db, $_GET['userName'], $_GET['password']);
     
     echo json_encode(session_id());
 } else {
