@@ -16,7 +16,7 @@
         while( $row = $pages_result->fetch_assoc() ){
             extract($row);
             header("Access-Control-Allow-Origin: *");
-            array_push($webPages, new Webpage($webpage_name, $webpage_id, $webpage_filename, $webpage_filepath));
+            array_push($webPages, new Webpage($webpage_name, $webpage_id, $webpage_filename, $webpage_filepath, $is_parent_page));
         }
     }else{
         //if database table is empty
@@ -45,20 +45,21 @@
     }
     $elements_result->free();
     $mysql->close();
-    $responce = '{"pages":[';
-    for($i = 0; $i < count($webPages); $i++){
-        $page = $webPages[$i];
-        $responce .= '{ "webpage_name":"'.$page->webpageName.'", "webpage_id":'.$page->webpageId;
-        $responce .= ',"webpage_filename":"'.$page->webFileName.'", "webpage_file_path":"'.$page->webFilePath.'"';
-        $responce .= ',"webpage_elements": [';
-        foreach($page->elements as &$element){
-            $responce .= '{"element_name":"'.$element->elementName.'","element_id":'.$element->elementId.',"element_color":"'.$element->elementColor.'","element_background":"';
-            $responce .= $element->elementBackground.'","element_type":"'.$element->elementType.'","element_font":"'.$element->elementFont.'","element_size":';
-            $responce .= $element->elementSize.'},';
-        }
-        $responce .= ']},';
-    }
-    $responce .= ']}';
-    $responce = str_replace("},]}","}]}", $responce);
+    // $responce = '{"pages":[';
+        // for($i = 0; $i < count($webPages); $i++){
+            //     $page = $webPages[$i];
+            //     $responce .= '{ "webpage_name":"'.$page->webpageName.'", "webpage_id":'.$page->webpageId;
+                //     $responce .= ',"webpage_filename":"'.$page->webFileName.'", "webpage_file_path":"'.$page->webFilePath.'"';
+    //     $responce .= ',"webpage_elements": [';
+    //     foreach($page->elements as &$element){
+    //         $responce .= '{"element_name":"'.$element->elementName.'","element_id":'.$element->elementId.',"element_color":"'.$element->elementColor.'","element_background":"';
+        //         $responce .= $element->elementBackground.'","element_type":"'.$element->elementType.'","element_font":"'.$element->elementFont.'","element_size":';
+    //         $responce .= $element->elementSize.'},';
+    //     }
+    //     $responce .= ']},';
+    // }
+    // $responce .= ']}';
+    // $responce = str_replace("},]}","}]}", $responce);
+    $responce = json_encode($webPages);
     echo $responce;
 ?>

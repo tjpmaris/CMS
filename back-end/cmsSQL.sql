@@ -32,7 +32,7 @@ create table if not exists webpage(
     webpage_name varchar(50),
     webpage_filepath varchar(255),
     webpage_filename varchar(45),
-    parent_page bit
+    is_parent_page bit
 );
 
 CREATE TABLE IF NOT EXISTS theme(
