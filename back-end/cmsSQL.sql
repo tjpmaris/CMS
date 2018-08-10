@@ -9,8 +9,9 @@ CREATE TABLE IF NOT EXISTS users (
   PRIMARY KEY (user_id)
 );
 
--- insert into users(user_id, user_name, user_role, user_password)
--- value(0,'admin','admin','password');
+-- this password is 'admin'
+insert into users(user_id, user_name, user_role, user_password)
+value(0,'admin','admin','$2y$10$d2XZKkwhPEiXjIJZUvve6OQNkiUZ.uYf5DGpLtcTdSDNVe9z89/Zm');
 
 create Table if Not exists Element(
 	element_id int(11) not null auto_increment,
@@ -28,9 +29,10 @@ create Table if Not exists Element(
 
 create table if not exists webpage(
 	webpage_id int(11) not null auto_increment Primary key,
-    webpage_name varchar(50)
+    webpage_name varchar(50),
     webpage_filepath varchar(255),
-    webpage_filename varchar(45)
+    webpage_filename varchar(45),
+    parent_page bit
 );
 
 CREATE TABLE IF NOT EXISTS theme(

@@ -17,8 +17,9 @@ $connection = db_connection($DB_CONFIG);
 $db = new ThemeDb($connection);
 $theme = $db->query_site_theme();
 
-echo json_encode($theme);
+$user = login(new UserDb($connection), "admin", "admin");
 
-login(new UserDb($connection), "admin", "admin");
+echo json_encode($theme);
+echo var_dump($user);
 
 ?>
