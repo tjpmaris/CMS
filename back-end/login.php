@@ -1,5 +1,4 @@
 <?php
-require_once "database/ThemeDb.class.php";
 require_once "database/mysql.php";
 require_once "authentication/authentication.php";
 
@@ -13,16 +12,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 
 header("Access-Control-Allow-Origin: *");
 
-$connection = db_connection($DB_CONFIG);
-$db = new ThemeDb($connection);
-$theme = $db->query_site_theme();
-
-// $db->set_site_theme($_GET['themeId']);
-
-// $user = login(new UserDb($connection), "admin", "admin");
-
-// echo json_encode(session_id());
-echo json_encode($theme);
-// echo var_dump($user);
+if (isset($_GET['userName']) && isset($_GET['password'])) {
+    $connection = db_connection($DB_CONFIG);
+    $db = new UserDb($connection);
+    $user = login($db, $_GET['userName'], $_GET['password']);
+    
+    echo json_encode(session_id());
+} else {
+    http_response_code(400);
+}
 
 ?>

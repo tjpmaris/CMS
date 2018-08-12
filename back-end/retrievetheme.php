@@ -17,12 +17,5 @@ $connection = db_connection($DB_CONFIG);
 $db = new ThemeDb($connection);
 $theme = $db->query_site_theme();
 
-// $db->set_site_theme($_GET['themeId']);
-
-// $user = login(new UserDb($connection), "admin", "admin");
-
-// echo json_encode(session_id());
 echo json_encode($theme);
-// echo var_dump($user);
-
 ?>
