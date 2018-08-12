@@ -12,6 +12,22 @@ CREATE TABLE IF NOT EXISTS users (
 -- this password is 'admin'
 insert into users(id, name, role, password)value(0,'admin','admin','$2y$10$d2XZKkwhPEiXjIJZUvve6OQNkiUZ.uYf5DGpLtcTdSDNVe9z89/Zm');
 
+create table if not exists webpage(
+	id int(11) not null auto_increment Primary key,
+    name varchar(50),
+    parentId int(11),
+	isHome boolean
+);
+
+insert into webpage(name, isHome)
+value ("Home", true);
+insert into webpage(name, isHome)
+value ("About", false);
+insert into webpage(name, isHome)
+value ("Contact", false);
+insert into webpage(name, parentId, isHome)
+value ("Home Extended", 1, false);
+
 create Table if Not exists Element(
 	id int(11) not null auto_increment,
     webpageId int(11),
@@ -25,13 +41,18 @@ create Table if Not exists Element(
 	primary key(id),
     unique index(name)
 );
-
-create table if not exists webpage(
-	id int(11) not null auto_increment Primary key,
-    name varchar(50),
-    filepath varchar(255),
-	isParent boolean
-);
+insert into Element(webpageId, name, content, `type`)
+value (1, "Home Header 1", "Some Header", "h1");
+insert into Element(webpageId, name, content, `type`)
+value (1, "Home Paragraph 1", "This is a paragraph.", "p");
+insert into Element(webpageId, name, content, `type`)
+value (1, "Home Paragraph 2", "This is another paragraph that is longer than the first one for some reason", "p");
+insert into Element(webpageId, name, content, `type`)
+value (2, "About Header 1", "Some Header", "h1");
+insert into Element(webpageId, name, content, `type`)
+value (2, "About Paragraph 1", "This is a paragraph.", "p");
+insert into Element(webpageId, name, content, `type`)
+value (3, "Contact Paragraph 1", "This is a paragraph.", "p");
 
 CREATE TABLE IF NOT EXISTS theme(
     theme_id int not null auto_increment PRIMARY KEY,

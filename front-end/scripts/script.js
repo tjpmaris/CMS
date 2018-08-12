@@ -1,50 +1,15 @@
 var elements = [];
+var elementsToRemove = [];
+var elementsToAdd = [];
 var pages = [];
+var pageToRemove;
+var pageToAdd;
 var mainPages = [];
 var childPages= [];
 var currentPageName;
 var currentPage;
+var editing = true;
 var request = new XMLHttpRequest();    
-
-function loadData() {
-    
-    if(filter != null && filter != ""){
-      if (url.includes("?")) {
-        url = url + "&"
-      }
-      else {
-        url = url + "?";
-      }
-  
-      url = url + "filter=" + filter;
-    }
-  
-    if(gender != null && gender != ""){
-      if (url.includes("?")) {
-        url = url + "&"
-      }
-      else {
-        url = url + "?";
-      }
-  
-      url = url + "gender=" + gender;
-    }
-  
-    if(limit != null && limit != ""){
-      if (url.includes("?")) {
-        url = url + "&"
-      }
-      else {
-        url = url + "?";
-      }
-  
-      url = url + "limit=" + limit;
-    }
-    
-    request.open('GET', url);
-    request.onload = loadComplete;
-    request.send();
-  }
 
 function getData(){
     var url = 'http://localhost/php/cms/back-end/database/Webpage.php';
@@ -52,39 +17,75 @@ function getData(){
     request.open('GET', url);
     request.onload = webpagesCallback;
     request.send();
-
-    //api call to get elements with page id 1
-    elements.push({ type:"h1", content:"Some Header"});
-    elements.push({ type:"p", content:"some information that is awesome"});
-    elements.push({ type:"p", content:"some other information that is even more awesome than the first because it it soooooo much longer than the first"});
 }
 
 function webpagesCallback(){
     var results = JSON.parse(request.responseText);
     pages = results.pages;
-    console.log(pages);
+    // console.log(pages);
     var path = window.location.pathname;
     if(currentPageName === undefined){
-        var tempname = path.substring(1, path.length - 1);
-        tempname = tempname.charAt(0).toUpperCase() + tempname.substring(1);
-        currentPage = pages.find(s => s.details.filepath == path && s.details.name == tempname);
+        currentPage = pages.find(s => s.details.isHome == true);
     }
     else{
-        currentPage = pages.find(s => s.details.filepath == path && s.details.name == currentPageName);
+        currentPage = pages.find(s => s.details.name == currentPageName);
     }
-    console.log(currentPage);
+
+    // console.log(currentPage);
     elements = currentPage.elements;
 
+    mainPages = pages.filter(s => s.details.parentId === null);
+    childPages = pages.filter(s => s.details.parentId !== null);
+    addLinksCallback(mainPages, childPages);
     addElementsCallback(elements);
-    addLinksCallback(pages, pages);
 }
 
 function addElementsCallback(elements){
-    elements.forEach(addElement);
+    if(editing){
+        addPageDeleteButton();
+        // startForm();
+        elements.forEach(addFormElements);
+        addSaveButton();
+    } else{
+        elements.forEach(addElement);
+    }
+}
+
+function addPageDeleteButton(){
+    var header = document.getElementById("NavBar");
+    var button = document.createElement("button");
+    button.innerHTML = "Remove Page";
+    button.addEventListener('click', deletePageClick);
+    header.appendChild(button);
+    
+    var btag = document.createElement("br");
+    header.appendChild(btag);
+}
+
+function addSaveButton(){
+    var header = document.getElementById("main-content");
+    var button = document.createElement("button");
+    button.innerHTML = "Save";
+    button.addEventListener('click', saveClick);
+    header.appendChild(button);
+    
+    var btag = document.createElement("br");
+    header.appendChild(btag);
+}
+
+function deletePageClick(){
+    var url = 'http://localhost/php/cms/back-end/database/DeleteWebpage.php?id=' + currentPage.details.id;
+    
+    request.open('GET', url);
+    request.onload = deletePageCallback;
+    request.send();
+}
+
+function deletePageCallback(){
+    hardRefresh();
 }
 
 function addElement(item, index) {
-    console.log(item);
     var div = document.getElementById("main-content");
     var element = document.createElement(item.type);
     var content = document.createTextNode(item.content);
@@ -92,44 +93,151 @@ function addElement(item, index) {
     div.appendChild(element);
 }
 
+function startForm() {
+    var div = document.getElementById("main-content");
+    var form = document.createElement("form");
+    form.id = "edit-form";
+    div.appendChild(form);
+}
+
+function addFormElements(item, index){
+    var form = document.getElementById("main-content");
+    // var form = document.getElementById("edit-form");
+    var div = document.createElement("div");
+    div.id = item.name;
+    div.style.borderBottom = "1px solid #000000";
+    form.appendChild(div);
+    
+    var label = document.createElement("label");
+    var labelContent = document.createTextNode(item.name);
+    label.appendChild(labelContent);
+    div.appendChild(label);
+
+    if(item.type === "p"){
+        var text = document.createElement("textarea");
+        var textContent = document.createTextNode(item.content);
+
+        text.appendChild(textContent);
+        div.appendChild(text);
+    } else {
+        var input = document.createElement("input");
+        input.type = "text";
+        input.value = item.content
+
+        div.appendChild(input);
+    }
+    
+    var button = document.createElement("button");
+    button.addEventListener('click', deleteElementClick);
+    button.innerHTML = "Delete";
+    div.appendChild(button);
+
+    var breakTag = document.createElement("br");    
+    div.appendChild(breakTag)
+}
+
+function deleteElementClick(evt){
+    var elementId = elements.find(s => s.name === evt.target.parentElement.id).id;
+    elementsToRemove.push(elementId);
+
+    evt.target.parentElement.parentElement.removeChild(evt.target.parentElement);
+    console.log(elementsToRemove);
+}
+
 function addLinksCallback(mainPages, childPages){
     mainPages.forEach(addMainLink);
-    // notmainpages.forEach(addNotMainLink);
+    childPages.forEach(addChildLink);
 }
 
 function addMainLink(item, index) {
     var header = document.getElementById("NavBar");
-    var aTag = document.createElement('a');
-    aTag.setAttribute('href', item.details.filepath);
-    aTag.innerHTML = item.details.name;
-    aTag.id = "MainLink" + item.details.name;
-    header.appendChild(aTag);
+    var button = document.createElement("button");
+    button.innerHTML = item.details.name;
+    button.addEventListener('click', linkClick);
+    header.appendChild(button);
     
     var btag = document.createElement("br");
     header.appendChild(btag);
 }
 
-function addNotMainLink(item, index) {
-    var header = document.getElementById("NavBar");
-    var aTag = document.createElement('a');
-    aTag.onclick = childPageLinkClick();
-    aTag.innerHTML = item.name;
-    header.appendChild(aTag);
+function addChildLink(item, index) {
+    if(currentPage.details.id === item.details.parentId || currentPage.details.parentId === item.details.parentId){
+        var header = document.getElementById("NavBar");
+        var button = document.createElement("button");
+        button.innerHTML = item.details.name;
+        button.addEventListener('click', linkClick);
+        header.appendChild(button);
+        
+        var btag = document.createElement("br");
+        header.appendChild(btag);
+    }
+}
+
+function linkClick(evt){
+    currentPageName = evt.target.innerHTML;
+    softRefresh();
+}
+
+function removePageElements() {
+    var div = document.getElementById("main-content");
+
+    while (div.firstChild) {
+        div.removeChild(div.firstChild);
+    }
+}
+
+function removeNavBarElements() {
+    var div = document.getElementById("NavBar");
+
+    while (div.firstChild) {
+        div.removeChild(div.firstChild);
+    }
+}
+
+function clearPage(){
+    removePageElements();
+    removeNavBarElements();
+}
+
+function softRefresh(){
+    elements = [];
+    elementsToRemove = [];
+    elementsToAdd = [];
+    pages = [];
+    pageToRemove = undefined;
+    pageToAdd = undefined;
+    mainPages = [];
+    childPages= [];
+    currentPage = undefined;
+    clearPage();
+    webpagesCallback();
+}
+
+function hardRefresh(){
+    elements = [];
+    elementsToRemove = [];
+    elementsToAdd = [];
+    pages = [];
+    pageToRemove = undefined;
+    pageToAdd = undefined;
+    mainPages = [];
+    childPages= [];
+    currentPageName = undefined;
+    currentPage = undefined;
+    clearPage();
+    getData();
+}
+
+function saveClick(){
+    elementsToRemove.forEach(deleteElementCall);
+    elementsToRemove = [];
+
+    editing = false;
+}
+
+function deleteElementCall(id, index){
+    var url = 'http://localhost/php/cms/back-end/database/deleteelement.php?id=' + id;
     
-    var btag = document.createElement("br");
-    header.appendChild(btag);
-}
-
-function childPageLinkClick(){
-
-}
-
-function removeElement(elementId) {
-    // Removes an element from the document
-    var element = document.getElementById(elementId);
-    element.parentNode.removeChild(element);
-}
-
-function getNewElements(pagename){
-    getElements();
+        request.open('GET', url);
+        request.send();
 }
