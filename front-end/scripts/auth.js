@@ -59,6 +59,7 @@ function setTheme(url, themeId) {
 }
 
 function setStyleFromTheme(theme) {
+    console.log(theme);
     let existingStyle = document.head.querySelector('#dynamic-css');
     if (existingStyle) {
         document.head.removeChild(existingStyle);
@@ -78,7 +79,6 @@ function login(url, session, userName, password) {
 
     return new Promise((resolve, reject) => {
         httpGet(url + queryString)
-            .then(console.log)
             .then(phpsessid => {
                 setSessionCookie(session, phpsessid);
                 resolve();

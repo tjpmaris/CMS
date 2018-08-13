@@ -9,11 +9,12 @@ var currentPageName;
 var currentPage;
 var editing = false;
 var allTypes = ["p", "h1"];
-var baseurl = "http://localhost/php/cms/back-end/";
+var baseurl = "http://localhost:8000/class/CMS/back-end/";
 var request = new XMLHttpRequest();
 
 function getData(){
     var url = baseurl + 'database/Webpage.php';
+    retrieveTheme(baseurl + "retrievetheme.php");
 
     request.open('GET', url);
     request.onload = webpagesCallback;
@@ -46,12 +47,41 @@ function addElementsCallback(elements){
         elements.forEach(addFormElements);
         addAddButton();
         addSaveButton();
+        addThemeSelect();
     } else{
         elements.forEach(addElement);
         if(isUserLoggedIn(session)){
             addEditButton();            
         }
     }
+}
+
+function addThemeSelect(){
+    var header = document.getElementById("button-div");
+    var dropdown = document.createElement("select");
+    dropdown.id = "themeSelect";
+
+    dropdown.options.add(new Option("Light", 1));
+    dropdown.options.add(new Option("Dark", 2));
+    dropdown.options.add(new Option("Colorful", 3));
+
+    dropdown.addEventListener('change', setThemeClick);
+    header.appendChild(dropdown);
+    
+    // var btag = document.createElement("br");
+    // header.appendChild(btag);
+}
+
+function setThemeClick() {
+    let select = document.getElementById("themeSelect");
+    console.log(select);
+
+    console.log("themeid", select.options[select.selectedIndex].value);
+
+    setTheme(baseurl + "settheme.php", select.options[select.selectedIndex].value)
+        .then(e => {
+            retrieveTheme(baseurl + "retrievetheme.php");
+        });
 }
 
 function addLoginButton(){
@@ -74,8 +104,8 @@ function addLogoutButton(){
     button.addEventListener('click', logoutClick);
     header.appendChild(button);
     
-    var btag = document.createElement("br");
-    header.appendChild(btag);
+    // var btag = document.createElement("br");
+    // header.appendChild(btag);
 }
 
 function logoutClick(){
@@ -533,7 +563,7 @@ function softRefresh(){
     elements = [];
     elementsToRemove = [];
     elementsToAdd = [];
-    pages = [];
+    // pages = [];
     pageToAdd = undefined;
     mainPages = [];
     childPages= [];
