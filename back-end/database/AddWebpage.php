@@ -3,14 +3,14 @@
     $mysqli = db_connection($DB_CONFIG);
     $sql = "insert into webpage (";
 
-    if(isset($_GET['name']) && isset($_GET['filepath']) && isset($_GET['isParent'])){
+    if(isset($_GET['name']) && isset($_GET['parentId']) && isset($_GET['isHome'])){
         $sql.= "name,";
-        $sql.= "filepath,";
-        $sql.= "isParent";
+        $sql.= "parentId,";
+        $sql.= "isHome";
         $sql .= ")values(";
         $sql.= "'".$_GET['name']."',";
-        $sql.= "'".$_GET['filepath']."',";
-        $sql.= "".$_GET['isParent'];
+        $sql.= "'".$_GET['parentId']."',";
+        $sql.= "".$_GET['isHome'];
         $sql .= ");";
     
         if( !$mysqli->query($sql) ) {
