@@ -9,10 +9,11 @@ var currentPageName;
 var currentPage;
 var editing = false;
 var allTypes = ["p", "h1"];
+var baseurl = "http://localhost/php/cms/back-end/";
 var request = new XMLHttpRequest();
 
 function getData(){
-    var url = 'http://localhost/php/cms/back-end/database/Webpage.php';
+    var url = baseurl + 'database/Webpage.php';
 
     request.open('GET', url);
     request.onload = webpagesCallback;
@@ -22,7 +23,6 @@ function getData(){
 function webpagesCallback(){
     var results = JSON.parse(request.responseText);
     pages = results.pages;
-    // console.log(pages);
     var path = window.location.pathname;
     if(currentPageName === undefined){
         currentPage = pages.find(s => s.details.isHome == true);
@@ -31,7 +31,6 @@ function webpagesCallback(){
         currentPage = pages.find(s => s.details.name == currentPageName);
     }
 
-    // console.log(currentPage);
     elements = currentPage.elements;
 
     mainPages = pages.filter(s => s.details.parentId === null);
@@ -80,9 +79,12 @@ function addLogoutButton(){
 }
 
 function logoutClick(){
-    var url = "http://localhost/php/cms/back-end/logout.php";
+    var url = baseurl + "logout.php";
 
-    logout(url);
+    logout(url).then(e => {
+        setSessionCookie(session, undefined);
+        hardRefresh()
+    });
 }
 
 function loginClick(){
@@ -145,7 +147,7 @@ function editClick(){
 }
 
 function deletePageClick(){
-    var url = 'http://localhost/php/cms/back-end/database/DeleteWebpage.php?id=' + currentPage.details.id;
+    var url = baseurl + "database/DeleteWebpage.php?id=" + currentPage.details.id;
     
     request.open('GET', url);
     request.onload = deletePageCallback;
@@ -200,15 +202,11 @@ function loginFormFinish(){
 
     var username = children[1].value;
     var password = children[4].value;
-    var url = "http://localhost/php/cms/back-end/login.php";
+    var url = baseurl + "login.php";
 
-    console.log(username);
-    console.log(password);
-    console.log(url);
     login(url, session, username, password).then(e => {
-        console.log("Admin logged in:", isUserLoggedIn(session));
         softRefresh();
-    }).catch(error => console.log(error));
+    });
 }
 
 function addPageDeleteButton(){
@@ -310,7 +308,7 @@ function editClick(){
 }
 
 function deletePageClick(){
-    var url = 'http://localhost/php/cms/back-end/database/DeleteWebpage.php?id=' + currentPage.details.id;
+    var url = baseurl + "database/DeleteWebpage.php?id=" + currentPage.details.id;
     
     request.open('GET', url);
     request.onload = deletePageCallback;
@@ -383,13 +381,12 @@ function addPage(evt){
 }
 
 function addPageCall(page){
-    var url = 'http://localhost/php/cms/back-end/database/AddWebpage.php?';
+    var url = baseurl + "database/AddWebpage.php?";
     url += "name=" + page.name;
     url += "&parentId=" + page.parentId;
     url += "&isHome=" + false;
 
     var url = encodeURI(url);
-    console.log(url);
     
     request.open('GET', url);
     request.onload = deletePageCallback;
@@ -578,9 +575,7 @@ function saveClick(){
     } else if(elementsToAdd.length > 0){
         var tempName = elementsToAdd.splice(0, 1);
         var element = {webpageId: currentPage.details.id};
-        console.log(tempName);
         constructAddElement(tempName, element);
-        console.log(element);
         addElementCall(element);
     } else{
         editing = false;
@@ -606,21 +601,20 @@ function constructEditElement(elementName, element){
 }
 
 function addElementCall(element){
-    var url = 'http://localhost/php/cms/back-end/database/AddElement.php?';
+    var url = baseurl + "database/AddElement.php?";
     url += "webpageId=" + element.webpageId;
     url += "&name=" + element.name;
     url += "&content=" + element.content;
     url += "&type=" + element.type;
 
     var url = encodeURI(url);
-    console.log(url);
     request.open('GET', url);
     request.onload = saveClick;
     request.send();
 }
 
 function updateElementCall(element){
-    var url = 'http://localhost/php/cms/back-end/database/EditElement.php?';
+    var url = baseurl + "database/EditElement.php?";
     url += "id=" + element.id;
     url += "&content=" + element.content;
     url += "&type=" + element.type;
@@ -632,7 +626,7 @@ function updateElementCall(element){
 }
 
 function deleteElementCall(id){
-    var url = 'http://localhost/php/cms/back-end/database/DeleteElement.php?id=' + id;
+    var url = baseurl + "database/DeleteElement.php?id=" + id;
     request.open('GET', url);
     request.onload = saveClick;
     request.send();
