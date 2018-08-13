@@ -78,7 +78,7 @@ function login(url, session, userName, password) {
 
     return new Promise((resolve, reject) => {
         httpGet(url + queryString)
-            .then(JSON.parse)
+            .then(console.log)
             .then(phpsessid => {
                 setSessionCookie(session, phpsessid);
                 resolve();

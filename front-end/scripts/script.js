@@ -49,8 +49,166 @@ function addElementsCallback(elements){
         addSaveButton();
     } else{
         elements.forEach(addElement);
-        addEditButton();
+        if(isUserLoggedIn(session)){
+            addEditButton();            
+        }
     }
+}
+
+function addLoginButton(){
+    var header = document.getElementById("NavBar");
+    var button = document.createElement("button");
+
+    button.innerHTML = "Login";
+    button.addEventListener('click', loginClick);
+    header.appendChild(button);
+    
+    var btag = document.createElement("br");
+    header.appendChild(btag);
+}
+
+function addLogoutButton(){
+    var header = document.getElementById("NavBar");
+    var button = document.createElement("button");
+
+    button.innerHTML = "Logout";
+    button.addEventListener('click', logoutClick);
+    header.appendChild(button);
+    
+    var btag = document.createElement("br");
+    header.appendChild(btag);
+}
+
+function logoutClick(){
+    var url = "http://localhost/php/cms/back-end/logout.php";
+
+    logout(url);
+}
+
+function loginClick(){
+    removeMainContentElements();
+    removeButtonDivElements();
+
+    var form = document.getElementById("main-content");
+    var div = document.createElement("div");
+    div.id = "login-div";
+    form.appendChild(div);
+    
+    var label = document.createElement("label");
+    var labelContent = document.createTextNode("Username:");
+    label.appendChild(labelContent);
+    div.appendChild(label);
+    
+    var input = document.createElement("input");
+    input.type = "text";
+    div.appendChild(input);
+
+    var breakTag = document.createElement("br");    
+    div.appendChild(breakTag);
+
+    var label = document.createElement("label");
+    var labelContent = document.createTextNode("Password:");
+    label.appendChild(labelContent);
+    div.appendChild(label);
+    
+    var input = document.createElement("input");
+    input.type = "text";
+    div.appendChild(input);
+    
+    var breakTag = document.createElement("br");    
+    div.appendChild(breakTag);
+    
+    var button = document.createElement("button");
+    button.addEventListener('click', loginFormFinish);
+    button.innerHTML = "Login";
+    div.appendChild(button);
+
+    var breakTag = document.createElement("br");    
+    div.appendChild(breakTag)
+}
+
+function addEditButton(){
+    var header = document.getElementById("main-content");
+    var button = document.createElement("button");
+
+    button.innerHTML = "Edit";
+    button.addEventListener('click', editClick);
+    header.appendChild(button);
+    
+    var btag = document.createElement("br");
+    header.appendChild(btag);
+}
+
+function editClick(){
+    editing = true;
+    softRefresh();
+}
+
+function deletePageClick(){
+    var url = 'http://localhost/php/cms/back-end/database/DeleteWebpage.php?id=' + currentPage.details.id;
+    
+    request.open('GET', url);
+    request.onload = deletePageCallback;
+    request.send();
+}
+
+function createPageClick(){
+    removeMainContentElements();
+    removeButtonDivElements();
+
+    var form = document.getElementById("main-content");
+    var div = document.createElement("div");
+    div.id = "create-page-div";
+    form.appendChild(div);
+    
+    var label = document.createElement("label");
+    var labelContent = document.createTextNode("Page Name:");
+    label.appendChild(labelContent);
+    div.appendChild(label);
+    
+    var input = document.createElement("input");
+    input.type = "text";
+    div.appendChild(input);
+
+    var breakTag = document.createElement("br");    
+    div.appendChild(breakTag);
+
+    var label = document.createElement("label");
+    var labelContent = document.createTextNode("Parent Page Name:");
+    label.appendChild(labelContent);
+    div.appendChild(label);
+    
+    var input = document.createElement("input");
+    input.type = "text";
+    div.appendChild(input);
+    
+    var breakTag = document.createElement("br");    
+    div.appendChild(breakTag);
+    
+    var button = document.createElement("button");
+    button.addEventListener('click', addPage);
+    button.innerHTML = "Save";
+    div.appendChild(button);
+
+    var breakTag = document.createElement("br");    
+    div.appendChild(breakTag)
+}
+
+function loginFormFinish(){
+    var div = document.getElementById("login-div");
+    var children = div.children;
+
+    var username = children[1].value;
+    var password = children[4].value;
+    var url = "http://localhost/php/cms/back-end/login.php";
+
+    console.log(username);
+    console.log(password);
+    console.log(url);
+    login(url, session, username, password).then(e => {
+        console.log("Admin logged in:", isUserLoggedIn(session));
+        softRefresh();
+    }).catch(error => console.log(error));
 }
 
 function addPageDeleteButton(){
@@ -306,6 +464,11 @@ function deleteElementClick(evt){
 }
 
 function addLinksCallback(mainPages, childPages){
+    if(isUserLoggedIn(session)){
+        addLogoutButton();
+    } else{
+        addLoginButton();            
+    }
     mainPages.forEach(addMainLink);
     childPages.forEach(addChildLink);
 }
