@@ -43,6 +43,7 @@ function webpagesCallback(){
 function addElementsCallback(elements){
     if(editing){
         addPageDeleteButton();
+        addPageCreateButton();
         elements.forEach(addFormElements);
         addAddButton();
         addSaveButton();
@@ -58,6 +59,18 @@ function addPageDeleteButton(){
 
     button.innerHTML = "Remove Page";
     button.addEventListener('click', deletePageClick);
+    header.appendChild(button);
+    
+    var btag = document.createElement("br");
+    header.appendChild(btag);
+}
+
+function addPageCreateButton(){
+    var header = document.getElementById("NavBar");
+    var button = document.createElement("button");
+
+    button.innerHTML = "Add Page";
+    button.addEventListener('click', createPageClick);
     header.appendChild(button);
     
     var btag = document.createElement("br");
@@ -146,6 +159,89 @@ function deletePageClick(){
     request.send();
 }
 
+function createPageClick(){
+    removeMainContentElements();
+    removeButtonDivElements();
+
+    var form = document.getElementById("main-content");
+    var div = document.createElement("div");
+    div.id = "create-page-div";
+    form.appendChild(div);
+    
+    var label = document.createElement("label");
+    var labelContent = document.createTextNode("Page Name:");
+    label.appendChild(labelContent);
+    div.appendChild(label);
+    
+    var input = document.createElement("input");
+    input.type = "text";
+    div.appendChild(input);
+
+    var breakTag = document.createElement("br");    
+    div.appendChild(breakTag);
+
+    var label = document.createElement("label");
+    var labelContent = document.createTextNode("Parent Page Name:");
+    label.appendChild(labelContent);
+    div.appendChild(label);
+    
+    var input = document.createElement("input");
+    input.type = "text";
+    div.appendChild(input);
+    
+    var breakTag = document.createElement("br");    
+    div.appendChild(breakTag);
+
+    // var label = document.createElement("label");
+    // var labelContent = document.createTextNode("Is Home Page:");
+    // label.appendChild(labelContent);
+    // div.appendChild(label);
+    
+    // var input = document.createElement("input");
+    // input.type = "checkbox";
+    // div.appendChild(input);
+    
+    // var breakTag = document.createElement("br");    
+    // div.appendChild(breakTag);
+    
+    var button = document.createElement("button");
+    button.addEventListener('click', addPage);
+    button.innerHTML = "Save";
+    div.appendChild(button);
+
+    var breakTag = document.createElement("br");    
+    div.appendChild(breakTag)
+}
+
+function addPage(evt){
+    var div = document.getElementById("create-page-div");
+    var children = div.children;
+
+    var page = {};
+    page.name = children[1].value;
+    page.parentId = pages.find(s => s.details.name === children[4].value).details.id;
+
+    addPageCall(page);
+}
+
+function addPageCall(page){
+    var url = 'http://localhost/php/cms/back-end/database/AddWebpage.php?';
+    url += "name=" + page.name;
+    url += "&parentId=" + page.parentId;
+    url += "&isHome=" + false;
+
+    var url = encodeURI(url);
+    console.log(url);
+    
+    request.open('GET', url);
+    request.onload = deletePageCallback;
+    request.send();
+}
+
+function addPageCallback(){
+    hardRefresh();
+}
+
 function deletePageCallback(){
     hardRefresh();
 }
@@ -156,13 +252,6 @@ function addElement(item, index) {
     var content = document.createTextNode(item.content);
     element.appendChild(content);
     div.appendChild(element);
-}
-
-function startForm() {
-    var div = document.getElementById("main-content");
-    var form = document.createElement("form");
-    form.id = "edit-form";
-    div.appendChild(form);
 }
 
 function addFormElements(item, index){
