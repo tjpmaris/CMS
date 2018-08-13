@@ -133,3 +133,14 @@ function removeElement(elementId) {
 function getNewElements(pagename){
     getElements();
 }
+
+document.getElementById("addPageButton").addEventListener("click", addPage)
+function addPage(){
+    var content = '<!DOCTYPE html\><html\><head\><link rel="stylesheet" href="../css/stylez.css"\></head\><body\><header id="NavBar"\>'+
+    '</header\><div id="main-content"\></div\><script src="../scripts/script.js"></script\><script>getData();</script\></body\></html\>';
+    var filePath = window.location.href;
+    var file = new File(filePath);
+    file.open("w");
+    file.writeln(content);
+    file.msClose();
+}
