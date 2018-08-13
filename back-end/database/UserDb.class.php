@@ -9,22 +9,22 @@
         }
 
         public function try_login_user($username, $password) {
-            $result = $this->query_by_user_name($username);
+            $result = $this->query_by_name($username);
 
-            $valid_password = password_verify($password, $result['user_password']);
+            $valid_password = password_verify($password, $result['password']);
             if (!$valid_password) {
                 return null;
             }
 
-            return new User($result['user_id'], $result['user_name'], $result['user_role']);
+            return new User($result['id'], $result['name'], $result['role']);
         }
 
-        private function query_by_user_name($user_name) {
+        private function query_by_name($name) {
             $db = $this->db;
             $query = 
-                'SELECT user_id, user_name, user_role, user_password ' .
+                'SELECT id, name, role, password ' .
                 'FROM users ' .
-                "WHERE user_name = '" . $db->real_escape_string($user_name) . "';";
+                "WHERE name = '" . $db->real_escape_string($name) . "';";
 
             $result = $db->query($query);
             if (!$result) {
@@ -35,23 +35,23 @@
         }
 
         public function try_add_user(User $user, $raw_password) {
-            $existing_user = $this->query_by_user_name($user->name);
+            $existing_user = $this->query_by_name($user->name);
 
             if ($existing_user) {
                 return null;
             }
 
             $hashed_password = UserDb::encrypt_password($raw_password);
-            $user_id = $this->add_user($user, $hashed_password);
+            $id = $this->add_user($user, $hashed_password);
 
-            return new User($user_id, $user->name, $user->role);
+            return new User($id, $user->name, $user->role);
         }
 
         private function add_user(User $user, $hashed_password) {
             $db = $this->db;
 
             $query =
-                'INSERT INTO users (user_name, user_role, user_password) VALUES(' .
+                'INSERT INTO users (name, role, password) VALUES(' .
                 "'" . $db->real_escape_string($user->name) . "'," .
                 "'" . $db->real_escape_string($user->role) . "'," .
                 "'" . $db->real_escape_string($hashed_password) . "');";
@@ -69,7 +69,7 @@
         }
 
         public function seed() {
-            $existing_admin = $this->query_by_user_name('admin');
+            $existing_admin = $this->query_by_name('admin');
 
             if ($existing_admin) {
                 return;
