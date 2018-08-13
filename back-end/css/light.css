@@ -24,15 +24,13 @@ main {
     flex-grow: 1;
     flex-basis: auto;
     flex-direction: column;
+    padding-left: 10%;
+    padding-right:30%;
+    flex-basis: 60%;
 }
 
 main h1 {
     color: var(--secondary-color);
-}
-
-main h1, main p {
-    margin-left: 10%;
-    width: 50%;
 }
 
 h1 {
@@ -43,7 +41,7 @@ h1 {
 .navigation {
     display: flex;
     flex-grow: 1;
-    flex-basis: 90%;
+    flex-basis: 30%;
     flex-direction: column;
     background: var(--navigation-color);
     box-shadow: 1px 0px 12px 0px var(--shadow-color);
@@ -72,7 +70,7 @@ h1 {
     width: 100%;
 }
 
-.navigation a {
+.navigation button {
     padding: .5rem 0 .5rem 4rem;
     display: block;
     color: var(--link-color);
@@ -80,28 +78,34 @@ h1 {
     letter-spacing: 1px;
     font-size: 18px;
     font-weight: 100;
+    border: none;
+    width: 100%;
+    background: var(--navigation-color);
+    text-align: left;
 }
 
 .navigation li:nth-child(1) {
     border-top: 2px solid rgba(255, 255, 255, .30);
 }
 
-.navigation a:nth-child(2) {
+.navigation button:nth-child(2) {
     border-bottom: 2px solid rgba(255, 255, 255, .30);
 }
 
-.navigation a:last-child {
+.navigation button:last-child {
     border-bottom: 2px solid rgba(255, 255, 255, .30);
 }
 
-.navigation a:hover {
+.navigation button:hover {
     background-color:var(--background-color);
     color: var(--text-color);
 }
-.navigation a:active {
+.navigation button:active {
     color:#fefefe;
     background-color:rgba(255, 255, 255, .30);
 }
+
+.navigation button:focus {outline:0;}
 
 .form input[type="text"],
 .form input[type="password"],
